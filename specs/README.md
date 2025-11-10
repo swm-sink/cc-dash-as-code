@@ -14,8 +14,16 @@ We follow GitHub's spec-kit approach for specification-driven development:
 ## Directory Structure
 
 ```
-.specify/specs/
+specs/
 ├── README.md (this file)
+├── memory/
+│   └── constitution.md   # Project principles
+├── templates/
+│   ├── spec-template.md  # Specification template
+│   ├── plan-template.md  # Plan template
+│   └── tasks-template.md # Tasks template
+├── research/
+│   └── *.md             # Research documents
 ├── 001-dashboard-foundation/
 │   └── spec.md
 ├── 002-claude-code-commands-setup/
@@ -98,7 +106,7 @@ Each spec must include:
 
 ## Git Workflow
 
-1. Create spec in `.specify/specs/NNN-feature-name/spec.md`
+1. Create spec in `specs/NNN-feature-name/spec.md`
 2. Review and approve spec (mark status as "Approved")
 3. Create feature branch: `git checkout -b NNN-feature-name`
 4. Implement following the spec
@@ -110,8 +118,8 @@ Each spec must include:
 ### Manual Creation
 
 1. Determine next feature number
-2. Create directory: `.specify/specs/NNN-feature-name/`
-3. Copy template from `.specify/templates/spec-template.md`
+2. Create directory: `specs/NNN-feature-name/`
+3. Copy template from `specs/templates/spec-template.md`
 4. Fill in all required sections
 5. Request review
 
@@ -131,7 +139,7 @@ This will automatically:
 
 1. **Self-Review**: Creator reviews using checklist
 2. **Peer Review**: Team member reviews for clarity and completeness
-3. **Constitutional Review**: Verify alignment with `.specify/memory/constitution.md`
+3. **Constitutional Review**: Verify alignment with `specs/memory/constitution.md`
 4. **Technical Review**: Validate technical feasibility
 5. **Approval**: Mark spec as "Approved" and proceed to implementation
 
@@ -145,9 +153,10 @@ This will automatically:
 
 ## Questions?
 
-- Review constitution: `.specify/memory/constitution.md`
-- Check templates: `.specify/templates/`
+- Review constitution: `specs/memory/constitution.md`
+- Check templates: `specs/templates/`
 - See examples: Existing specs in this directory
+- See research: `specs/research/`
 
 ---
 

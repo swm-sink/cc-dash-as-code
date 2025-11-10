@@ -97,6 +97,9 @@ reference/
 # Backup directories
 .claude.backup/
 
+# Old spec directory (replaced by specs/)
+.specify/
+
 # Build artifacts
 *.whl
 *.tar.gz
