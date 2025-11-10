@@ -1,61 +1,69 @@
-# /dashboard.spec - Create Feature Specification
+---
+allowed-tools: Read, Write, Bash(git:*), Glob
+description: Create a new feature specification following spec-kit methodology
+argument-hint: <feature description>
+---
 
-Create a new feature specification following the spec-kit methodology for dashboard development.
+# Create Feature Specification
 
-## Command Usage
+You are creating a new feature specification for a Plotly Dash dashboard following the spec-kit methodology.
 
-```
-/dashboard.spec [feature description]
-```
+## Current Project Context
 
-## Arguments
+- Project Constitution: !`cat .specify/memory/constitution.md`
+- Existing Specifications: !`ls -1 .specify/specs/ 2>/dev/null || echo "No specs yet"`
+- Current Branch: !`git branch --show-current`
 
-- `feature description` (required): Brief description of the feature to be built
+## Your Task
 
-## Behavior
+**Input**: $ARGUMENTS (feature description from user)
 
-When this command is executed, Claude Code should:
+**Steps to Execute:**
 
-1. **Parse the feature description** from the user
-2. **Generate a unique feature number** (e.g., 003, 004) by checking existing specs in `.specify/specs/`
-3. **Create a feature directory** at `.specify/specs/{number}-{kebab-case-name}/`
-4. **Copy the spec template** from `.specify/templates/spec-template.md`
-5. **Populate the template** with:
-   - Feature name derived from description
-   - Feature branch name (format: `{number}-{kebab-case-name}`)
-   - Current date
-   - User description in the "Input" field
-   - Initial user stories based on the description (prioritized)
-   - Functional requirements (numbered FR-001, FR-002, etc.)
-   - Success criteria (numbered SC-001, SC-002, etc.)
-   - Edge cases
-   - Key entities
-6. **Review the constitution** (`.specify/memory/constitution.md`) to ensure alignment
-7. **Save the specification** to `spec.md` in the feature directory
-8. **Create a feature branch** in git with the name `{number}-{kebab-case-name}`
-9. **Output a summary** showing what was created and next steps
+1. **Generate unique feature number**
+   - Check existing specs in `.specify/specs/`
+   - Assign next available number (e.g., 003, 004, 005)
 
-## Example
+2. **Create feature directory**
+   - Format: `.specify/specs/{number}-{kebab-case-name}/`
+   - Example: `.specify/specs/003-sales-analytics-dashboard/`
 
-```
-User: /dashboard.spec Create a sales analytics dashboard with filtering by date range and product category
+3. **Copy and populate spec template**
+   - Source: `.specify/templates/spec-template.md`
+   - Destination: `.specify/specs/{feature}/spec.md`
+   - Fill in:
+     - Feature name (derived from description)
+     - Feature branch name
+     - Current date
+     - User description in "Input" field
+     - Initial user stories (prioritized P1, P2, P3)
+     - Functional requirements (FR-001, FR-002, ...)
+     - Success criteria (SC-001, SC-002, ...)
+     - Edge cases
+     - Key entities
 
-Claude Code:
-✓ Generated feature number: 003
-✓ Created directory: .specify/specs/003-sales-analytics-dashboard/
-✓ Created specification: .specify/specs/003-sales-analytics-dashboard/spec.md
-✓ Created git branch: 003-sales-analytics-dashboard
+4. **Review constitution alignment**
+   - Ensure specification follows project principles
+   - Technology-agnostic (WHAT and WHY, not HOW)
+   - Measurable success criteria
+   - Security, performance, accessibility requirements
+   - Testing expectations (80% coverage)
 
-Next steps:
-1. Review the generated specification
-2. Refine user stories and requirements
-3. Run /dashboard.plan to create implementation plan
-```
+5. **Create git branch**
+   - Branch name: `{number}-{kebab-case-name}`
+   - Example: `003-sales-analytics-dashboard`
+   - Switch to the new branch
 
-## Specification Quality Checklist
+6. **Output summary**
+   - Feature number assigned
+   - Directory created
+   - Spec file created
+   - Git branch created
+   - Next steps
 
-The generated specification should include:
+## Quality Checklist
 
+The generated specification MUST include:
 - [ ] Prioritized user stories (P1, P2, P3)
 - [ ] Each user story is independently testable
 - [ ] Functional requirements with unique IDs (FR-001, FR-002, ...)
@@ -64,31 +72,19 @@ The generated specification should include:
 - [ ] Key entities identified
 - [ ] Review & acceptance checklist included
 
-## Constitution Alignment
+## Next Steps for User
 
-The specification must align with project principles from `.specify/memory/constitution.md`:
-
-- Technology-agnostic (focus on WHAT and WHY, not HOW)
-- Measurable success criteria
-- Security and privacy considerations
-- Performance targets
-- Accessibility requirements (WCAG 2.1 AA)
-- Testing expectations (80% coverage)
+After completing this command, inform the user:
+1. Review the generated specification
+2. Refine user stories and requirements as needed
+3. Run `/dashboard.plan` to create implementation plan
 
 ## Error Handling
 
-If the command fails, provide clear error messages:
-
-- **Missing .specify/ directory**: "This doesn't appear to be a spec-driven project. Run the project initialization first."
-- **Invalid feature description**: "Please provide a feature description. Usage: /dashboard.spec [description]"
-- **Duplicate feature number**: "Feature number already exists. Generated next available number."
-
-## Related Commands
-
-- `/dashboard.plan` - Create implementation plan (next step)
-- `/dashboard.tasks` - Generate task breakdown
-- `/dashboard.analyze` - Analyze specification quality
+- If `.specify/` doesn't exist: "This doesn't appear to be a spec-driven project. Initialize project first."
+- If no description provided: "Please provide a feature description as an argument."
+- If duplicate feature number: Generate next available number automatically
 
 ---
 
-*This command initiates the spec-driven development workflow for dashboard features.*
+**Note**: This command creates the specification only. Implementation planning comes next with `/dashboard.plan`.
