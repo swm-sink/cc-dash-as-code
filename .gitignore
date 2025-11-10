@@ -94,6 +94,9 @@ credentials/
 # See docs/REFERENCES.md for list and clone instructions
 reference/
 
+# Backup directories
+.claude.backup/
+
 # Build artifacts
 *.whl
 *.tar.gz
