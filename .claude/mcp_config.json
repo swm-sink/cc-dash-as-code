@@ -1,0 +1,72 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp_config.json",
+  "version": "1.0.0",
+  "description": "MCP server configuration for dashboard development data access",
+  "mcpServers": {
+    "filesystem": {
+      "command": "mcp-server-filesystem",
+      "args": [
+        "--root-path",
+        "./data"
+      ],
+      "description": "Access CSV, JSON, Parquet files in data directory",
+      "env": {}
+    },
+    "postgres": {
+      "command": "mcp-server-postgres",
+      "args": [
+        "--connection-string",
+        "${POSTGRES_URL}"
+      ],
+      "description": "PostgreSQL database access for dashboards",
+      "env": {
+        "POSTGRES_URL": "postgresql://user:password@localhost:5432/dashboard_db"
+      },
+      "enabled": false
+    },
+    "sqlite": {
+      "command": "mcp-server-sqlite",
+      "args": [
+        "--db-path",
+        "./data/local.db"
+      ],
+      "description": "SQLite database for local development",
+      "env": {}
+    },
+    "fetch": {
+      "command": "mcp-server-fetch",
+      "args": [],
+      "description": "Fetch data from REST APIs",
+      "env": {}
+    },
+    "search": {
+      "command": "mcp-server-search",
+      "args": [
+        "--index-path",
+        "./reference"
+      ],
+      "description": "Search through reference documentation",
+      "env": {}
+    }
+  },
+  "security": {
+    "allowedPaths": [
+      "./data",
+      "./reference",
+      "./docs"
+    ],
+    "deniedPaths": [
+      "./secrets",
+      "./.env"
+    ]
+  },
+  "performance": {
+    "enableCaching": true,
+    "cacheTimeout": 3600,
+    "maxConcurrentConnections": 5
+  },
+  "logging": {
+    "level": "info",
+    "logFile": "./.claude/mcp.log"
+  }
+}

@@ -1,0 +1,274 @@
+# Claude Code Agent Configuration
+
+version: 1.0.0
+description: Configuration for Claude Code agent behavior in spec-driven dashboard development
+
+# Code Quality Standards
+code_quality:
+  # Minimum test coverage percentage
+  min_coverage: 80
+
+  # Code formatters to apply
+  formatters:
+    - black       # Python code formatter
+    - ruff        # Fast Python linter
+
+  # Type checking configuration
+  type_checking:
+    tool: mypy
+    mode: strict
+    require_type_hints: true
+
+  # Code review criteria
+  review:
+    check_security: true
+    check_performance: true
+    check_accessibility: true
+    check_documentation: true
+
+# Testing Requirements
+testing:
+  # Testing frameworks
+  frameworks:
+    - pytest
+    - pytest-cov
+    - playwright
+
+  # Test types required
+  require_tests:
+    unit: true
+    integration: true
+    e2e: true
+
+  # Test organization
+  structure:
+    unit_path: tests/unit/
+    integration_path: tests/integration/
+    e2e_path: tests/e2e/
+    fixtures_path: tests/fixtures/
+
+  # Coverage reporting
+  coverage:
+    format: html
+    output: htmlcov/
+    fail_under: 80
+
+# Agent Memory Configuration
+memory:
+  # Persist context across sessions
+  persist: true
+
+  # Memory storage location
+  location: .specify/memory/
+
+  # Memory files
+  files:
+    constitution: constitution.md
+    patterns: patterns.md
+    decisions: decisions.md
+    preferences: preferences.md
+
+  # Auto-save interval (minutes)
+  autosave_interval: 10
+
+  # Maximum memory size (MB)
+  max_size: 10
+
+# Sub-Agent Coordination
+sub_agents:
+  # Maximum concurrent sub-agents
+  max_concurrent: 4
+
+  # Coordination strategy
+  coordination: file_locking  # Options: file_locking, queue, coordinator
+
+  # Sub-agent types
+  available:
+    - component-builder
+    - data-pipeline
+    - test-engineer
+    - documentation
+
+  # Timeout for sub-agent tasks (minutes)
+  task_timeout: 30
+
+  # Retry failed sub-agent tasks
+  retry_on_failure: true
+  max_retries: 3
+
+# Dashboard Development Standards
+dashboard:
+  # Plotly Dash version
+  dash_version: ">=2.14.0"
+
+  # Performance targets
+  performance:
+    initial_load_time: 3  # seconds
+    callback_response_time: 1  # seconds
+    max_data_points: 10000
+
+  # Accessibility standards
+  accessibility:
+    wcag_level: AA  # Options: A, AA, AAA
+    contrast_ratio: 4.5
+    require_alt_text: true
+    keyboard_navigable: true
+
+  # Responsive breakpoints (pixels)
+  responsive:
+    mobile: 768
+    tablet: 1024
+    desktop: 1280
+
+  # Component conventions
+  components:
+    naming: snake_case
+    file_location: src/components/
+    include_tests: true
+    include_docs: true
+
+# Specification Workflow
+spec_workflow:
+  # Template locations
+  templates:
+    spec: .specify/templates/spec-template.md
+    plan: .specify/templates/plan-template.md
+    tasks: .specify/templates/tasks-template.md
+
+  # Auto-generate feature numbers
+  auto_number: true
+
+  # Create git branches automatically
+  create_branch: true
+
+  # Branch naming pattern
+  branch_pattern: "{number}-{name}"
+
+  # Require constitution alignment
+  enforce_constitution: true
+
+# MCP Integration
+mcp:
+  # Configuration file
+  config_file: .claude/mcp_config.json
+
+  # Enable MCP servers
+  enabled: true
+
+  # Retry configuration
+  retry:
+    max_attempts: 3
+    backoff: exponential
+    initial_delay: 1  # seconds
+
+  # Cache MCP responses
+  caching:
+    enabled: true
+    ttl: 3600  # seconds
+
+# Git Configuration
+git:
+  # Auto-commit at milestones
+  auto_commit: true
+
+  # Commit message format
+  commit_format: conventional  # Options: conventional, simple
+
+  # Create commits after
+  commit_after:
+    - user_story_complete
+    - phase_complete
+    - all_tests_pass
+
+  # Require clean working tree
+  require_clean: false
+
+# Deployment Configuration
+deployment:
+  # Target platforms
+  platforms:
+    - agent_sdk    # Claude Agent SDK
+    - docker       # Docker containers
+
+  # Environment configurations
+  environments:
+    - dev
+    - staging
+    - prod
+
+  # Agent SDK settings
+  agent_sdk:
+    config_path: agents/
+    health_checks: true
+    auto_scaling: true
+
+# Logging Configuration
+logging:
+  # Log level
+  level: info  # Options: debug, info, warning, error
+
+  # Log file location
+  file: .claude/agent.log
+
+  # Log rotation
+  rotation:
+    enabled: true
+    max_size: 10  # MB
+    backup_count: 5
+
+  # Log format
+  format: json  # Options: json, text
+
+# Performance Tuning
+performance:
+  # Parallel task execution
+  parallel_execution: true
+
+  # Max parallel tasks
+  max_parallel_tasks: 3
+
+  # Enable caching
+  enable_caching: true
+
+  # Cache directory
+  cache_dir: .claude/cache/
+
+  # Timeout for long operations (minutes)
+  operation_timeout: 30
+
+# Error Handling
+error_handling:
+  # Auto-retry on failures
+  auto_retry: true
+
+  # Max retry attempts
+  max_retries: 3
+
+  # Fail gracefully
+  graceful_degradation: true
+
+  # User intervention threshold
+  request_help_after: 3  # failed attempts
+
+# Security Settings
+security:
+  # Scan for secrets in code
+  scan_secrets: true
+
+  # Allowed secret sources
+  secret_sources:
+    - environment_variables
+    - secret_management_service
+
+  # Disallow hardcoded secrets
+  disallow_hardcoded: true
+
+  # Security scanning tools
+  tools:
+    - bandit     # Python security linter
+    - safety     # Dependency vulnerability scanner
+
+---
+
+# This configuration ensures Claude Code follows project standards and best practices
+# for spec-driven dashboard development with quality, performance, and security.

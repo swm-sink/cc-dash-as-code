@@ -1,0 +1,212 @@
+# Data Analysis Skill
+
+name: data-analysis
+version: 1.0.0
+description: Load, analyze, and generate insights from datasets for dashboard development
+
+## Capabilities
+
+capabilities:
+  - Load data from multiple formats (CSV, JSON, Parquet, SQL databases)
+  - Perform exploratory data analysis (EDA)
+  - Generate statistical summaries
+  - Identify data quality issues
+  - Detect patterns and correlations
+  - Suggest appropriate visualizations
+  - Generate data transformation pipelines
+
+## Input Schema
+
+inputs:
+  data_source:
+    type: string
+    description: Path to file or database connection string
+    required: true
+    examples:
+      - "./data/sales.csv"
+      - "postgresql://localhost/dashboard_db"
+      - "./data/transactions.parquet"
+
+  analysis_type:
+    type: string
+    description: Type of analysis to perform
+    required: false
+    default: "comprehensive"
+    enum:
+      - comprehensive  # Full EDA with all statistics
+      - quick         # Fast summary statistics only
+      - quality       # Data quality assessment only
+      - correlation   # Correlation analysis only
+
+  target_column:
+    type: string
+    description: Column of primary interest (optional)
+    required: false
+
+## Output Schema
+
+outputs:
+  summary:
+    type: object
+    description: Statistical summary of the dataset
+    properties:
+      row_count: integer
+      column_count: integer
+      memory_usage: string
+      missing_values: object
+      data_types: object
+
+  insights:
+    type: array
+    description: Key findings and insights
+    items:
+      - finding: string
+      - importance: enum [high, medium, low]
+      - recommendation: string
+
+  quality_issues:
+    type: array
+    description: Data quality problems detected
+    items:
+      - issue_type: enum [missing_values, duplicates, outliers, inconsistent_types]
+      - column: string
+      - severity: enum [critical, warning, info]
+      - affected_rows: integer
+      - recommendation: string
+
+  visualization_suggestions:
+    type: array
+    description: Recommended visualizations for the data
+    items:
+      - chart_type: enum [bar, line, scatter, histogram, box, heatmap]
+      - columns: array
+      - rationale: string
+      - priority: enum [high, medium, low]
+
+  transformation_pipeline:
+    type: string
+    description: Python code for data transformation pipeline
+    format: python_code
+
+## Implementation Guidelines
+
+implementation:
+  libraries:
+    - pandas: For data loading and manipulation
+    - numpy: For numerical computations
+    - scipy: For statistical analysis
+    - plotly: For quick visualizations during EDA
+
+  workflow:
+    1. Load data from source
+    2. Inspect structure and types
+    3. Calculate summary statistics
+    4. Identify missing values and outliers
+    5. Analyze distributions
+    6. Check for correlations
+    7. Detect quality issues
+    8. Generate insights
+    9. Suggest visualizations
+    10. Create transformation pipeline
+
+  error_handling:
+    - Handle missing files gracefully
+    - Validate data types
+    - Check for empty datasets
+    - Handle encoding issues for CSV files
+    - Manage large datasets with chunking
+    - Provide clear error messages
+
+  performance:
+    - Use pandas optimizations for large datasets
+    - Sample large datasets for quick analysis
+    - Cache results for repeated analyses
+    - Warn if dataset is too large for memory
+
+## Usage Examples
+
+### Example 1: Comprehensive Analysis
+
+```yaml
+input:
+  data_source: "./data/sales_2024.csv"
+  analysis_type: "comprehensive"
+
+expected_output:
+  summary:
+    row_count: 10000
+    column_count: 15
+    missing_values:
+      customer_name: 150
+      order_date: 0
+      revenue: 5
+  insights:
+    - finding: "Revenue shows strong weekly seasonality"
+      importance: "high"
+      recommendation: "Include weekday filters in dashboard"
+  visualization_suggestions:
+    - chart_type: "line"
+      columns: ["order_date", "revenue"]
+      rationale: "Trend analysis of revenue over time"
+      priority: "high"
+```
+
+### Example 2: Quick Summary
+
+```yaml
+input:
+  data_source: "postgresql://localhost/sales_db"
+  analysis_type: "quick"
+
+expected_output:
+  summary:
+    row_count: 1000000
+    column_count: 8
+    memory_usage: "76.3 MB"
+```
+
+## Integration with Commands
+
+This skill is invoked by:
+- `/dashboard.plan` - To understand data during planning
+- `/dashboard.implement` - To generate data transformation code
+- Data pipeline sub-agent - For automated analysis
+
+## Quality Standards
+
+- Analysis completes within 60 seconds for datasets < 100MB
+- Generates at least 3 actionable insights
+- Identifies all critical data quality issues
+- Suggests visualizations appropriate for data types
+- Produces runnable transformation code
+
+## Testing
+
+test_scenarios:
+  - name: "Small CSV file"
+    input_size: "< 10MB"
+    expected_time: "< 5 seconds"
+    assertions:
+      - All summary statistics calculated
+      - At least 3 insights generated
+      - Visualization suggestions provided
+
+  - name: "Large Parquet file"
+    input_size: "500MB"
+    expected_time: "< 60 seconds"
+    assertions:
+      - Handles with sampling/chunking
+      - Summary statistics accurate
+      - Performance warning issued
+
+  - name: "Database connection"
+    input_type: "PostgreSQL"
+    expected_time: "< 30 seconds"
+    assertions:
+      - Connection successful
+      - Query optimization used
+      - Results accurate
+
+---
+
+*This skill enables Claude Code to understand and analyze data before building dashboards.*
