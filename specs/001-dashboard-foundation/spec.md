@@ -3,7 +3,10 @@
 **Feature Branch**: `001-dashboard-foundation`
 **Created**: 2025-11-10
 **Status**: Draft
+**Implementation Priority**: P2 (Implement AFTER specs 002-004)
 **Input**: Spec-driven dashboard development project using Plotly Dash, Claude Code for development, and Claude Agent SDK for production
+
+**Note**: This spec defines the actual dashboard application foundation. It should be implemented **after** the Claude Code development environment is set up (specs 002-004), as those specs provide the tools, commands, and skills needed to build dashboards efficiently.
 
 ## Overview
 
@@ -331,6 +334,65 @@ The following are explicitly **not** included in this foundation specification:
 ## Clarifications
 
 *This section will be populated as questions arise and are answered during the specification refinement process.*
+
+---
+
+## Dependencies
+
+### Prerequisites (MUST be completed first)
+
+**Spec 002: Claude Code Commands Setup** (Status: Approved)
+- Provides `/spec:*`, `/workflow:*`, and `/utils:*` commands
+- Establishes hybrid workflow architecture (Spec-Kit planning + Claude Code execution)
+- Sets up `.claude/` directory structure with commands, skills, agents
+- Required for: Using spec-driven workflow to build dashboard features
+
+**Spec 003: Agent Skills - Development** (Status: Draft)
+- Provides Development Skills: spec-kit-workflow, claude-code-architecture, research-synthesis
+- Required for: Creating specs and following spec-kit methodology while building dashboards
+
+**Spec 004: Agent Skills - Production** (Status: Draft)
+- Provides Production Skills: data-analysis, plotly-viz, dash-components, accessibility-audit, performance-optimizer
+- Required for: Building dashboard features with domain expertise and quality assurance
+
+### Optional Dependencies
+
+**Spec 005: MCP Integration** (Status: Draft, Priority: P3)
+- Provides MCP servers for PostgreSQL, filesystem, API access
+- Optional enhancement: Dashboards can use direct access methods without MCP
+- If used: Enables standardized data access patterns via mcp__postgres and mcp__filesystem
+
+### Implementation Order
+
+Per `specs/INDEX.md`:
+```
+Implementation Order: 002 → 003 → 004 → [005 optional] → 001
+```
+
+**Rationale**:
+- Spec 002 provides the development tools (commands, architecture)
+- Spec 003 provides development guidance (how to write specs)
+- Spec 004 provides dashboard-building expertise (data, viz, components, quality)
+- Spec 005 optionally enhances data access
+- **This spec (001)** is implemented LAST using all the tools and skills from 002-004
+
+### Internal Dependencies
+
+- `specs/memory/constitution.md` - Project principles and standards
+- `specs/WORKFLOW.md` - Hybrid workflow architecture
+- `specs/templates/` - Spec, plan, tasks templates
+- `.claude/` - Commands, skills, agents (from spec 002)
+
+### External Dependencies
+
+- Python 3.11+
+- Plotly Dash 2.14+
+- Claude Code with Skills support
+- Git
+- Docker (for production deployment)
+- Claude Agent SDK (for production deployment)
+
+---
 
 ## Review & Acceptance Checklist
 
