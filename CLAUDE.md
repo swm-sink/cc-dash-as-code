@@ -2,374 +2,583 @@
 
 This file documents the custom Claude Code configuration for spec-driven dashboard development with Plotly Dash.
 
+**Last Updated**: 2025-11-13
+**Aligned with**: Spec 002 (Claude Code Commands Setup) - Approved
+
+---
+
 ## Overview
 
-This project uses Claude Code with custom slash commands, agent skills, and specialized sub-agents to accelerate dashboard development following the spec-kit methodology.
+This project uses Claude Code with custom slash commands, agent skills, and specialized sub-agents to accelerate dashboard development following the spec-kit methodology and EPIC workflow.
 
 **Key Capabilities:**
 - Custom slash commands for spec-driven workflow
+- EPIC methodology (Observe → Act → Verify → Loop)
 - Specialized agent skills for domain tasks
 - Sub-agents for parallel development
-- MCP integration for data access
+- MCP integration for data access (optional)
 - Agent memory for context persistence
 - Seamless Agent SDK deployment
 
+---
+
 ## Quick Start
 
-### 1. Initialize a Feature
+### 1. Create a Feature Specification
 
 ```bash
-/dashboard.spec Create a sales analytics dashboard with date filtering
+/spec.create Create a sales analytics dashboard with date filtering
 ```
 
-### 2. Create Implementation Plan
+### 2. Begin Implementation (EPIC Workflow)
 
 ```bash
-/dashboard.plan Use Plotly Dash with Pandas. PostgreSQL database. Docker deployment.
+/workflow.observe    # Analyze current state, identify next tasks
+/workflow.act        # Implement the identified task
+/workflow.verify     # Run tests, lint, type check
+/workflow.loop       # Checkpoint and continue
 ```
 
-### 3. Generate Tasks
+### 3. Utilities
 
 ```bash
-/dashboard.tasks
+/utils.test          # Run test suite
+/utils.lint          # Check code quality
+/utils.format        # Auto-format code
 ```
 
-### 4. Implement
-
-```bash
-/dashboard.implement
-```
-
-### 5. Test & Deploy
-
-```bash
-/dashboard.test
-/dashboard.deploy
-```
+---
 
 ## Custom Slash Commands
 
-All commands follow the `/dashboard.<action>` pattern.
+Commands are organized into 4 categories following Spec 002 architecture.
 
-### Core Workflow Commands
+### Specification Workflow Commands (`/spec.*`)
 
-#### `/dashboard.spec [description]`
+These commands help create and manage feature specifications following the spec-kit methodology.
 
-Create a new feature specification following spec-kit methodology.
+---
+
+#### `/spec.create [description]`
+
+Create a new feature specification with unique feature number.
 
 **Usage:**
 ```
-/dashboard.spec Build a customer analytics dashboard with filters for region and date range
+/spec.create Build a customer analytics dashboard with filters for region and date range
 ```
 
 **What it does:**
-- Generates unique feature number
-- Creates specification directory
-- Populates spec template
-- Creates git branch
+- Generates unique feature number (auto-increments)
+- Creates `specs/{number}-{feature-name}/` directory
+- Populates `spec.md` from template
+- Initializes README and directory structure
 - Reviews constitution for alignment
 
 **Output:**
-- `.specify/specs/{number}-{name}/spec.md`
-- Git branch: `{number}-{name}`
+- `specs/{number}-{feature-name}/spec.md`
+- Directory structure ready for plan.md and tasks.md
 
-**Next step:** `/dashboard.plan`
+**Next step:** Manually create `plan.md` and `tasks.md`, then `/workflow.observe`
 
 ---
 
-#### `/dashboard.plan [tech details]`
+#### `/spec.validate`
 
-Create technical implementation plan with architecture and tech stack.
+Check specification completeness and constitutional alignment.
 
 **Usage:**
 ```
-/dashboard.plan Dash 2.14+ with Pandas for data. FastAPI backend. PostgreSQL database. Docker Compose.
+/spec.validate
 ```
 
 **What it does:**
-- Reviews specification
-- Defines technology stack
-- Creates architecture design
-- Specifies components and APIs
-- Plans testing strategy
-- Researches latest versions
+- Validates spec.md structure (all required sections present)
+- Checks requirements have unique IDs (FR-NNN format)
+- Verifies success criteria are measurable
+- Checks alignment with constitution.md
+- Reports missing or incomplete sections
 
 **Output:**
-- `.specify/specs/{feature}/plan.md`
-- `.specify/specs/{feature}/research.md` (optional)
-- `.specify/specs/{feature}/data-model.md` (optional)
-
-**Next step:** `/dashboard.tasks`
+- Validation report with issues and recommendations
 
 ---
 
-#### `/dashboard.tasks`
+#### `/spec.list`
 
-Generate detailed task breakdown from implementation plan.
+Show all specifications with their current status.
 
 **Usage:**
 ```
-/dashboard.tasks
+/spec.list
 ```
 
 **What it does:**
-- Parses implementation plan
-- Breaks down into granular tasks
-- Identifies dependencies
-- Marks parallel tasks [P]
-- Orders for optimal execution
+- Lists all specs in specs/ directory
+- Shows status (draft, approved, implemented, etc.)
+- Displays feature numbers, names, priorities
+- Shows dependencies between specs
 
 **Output:**
-- `.specify/specs/{feature}/tasks.md`
-
-**Next step:** `/dashboard.implement`
+- Table of all specifications with metadata
 
 ---
 
-#### `/dashboard.implement`
+#### `/spec.show [feature-number]`
 
-Execute implementation tasks following TDD and quality gates.
+Display full specification content.
 
 **Usage:**
 ```
-/dashboard.implement
+/spec.show 003
 ```
 
 **What it does:**
-- Loads spec, plan, and tasks
-- Executes tasks in order
-- Writes code and tests (TDD)
-- Runs quality checks
-- Creates git commits
-- Validates checkpoints
+- Reads and displays spec.md for given feature
+- Shows user stories, requirements, success criteria
+- Displays dependencies and clarifications
 
 **Output:**
-- Source code in `src/`
-- Tests in `tests/`
-- Git commits at milestones
-- Coverage reports
-
-**Next step:** `/dashboard.test` or `/dashboard.review`
+- Full specification content
 
 ---
 
-### Quality & Analysis Commands
+#### `/spec.branch [feature-number]`
 
-#### `/dashboard.analyze`
-
-Perform cross-artifact consistency analysis.
+Create git feature branch from approved spec.
 
 **Usage:**
 ```
-/dashboard.analyze
+/spec.branch 003
 ```
 
 **What it does:**
-- Checks spec-code alignment
-- Validates requirement coverage
-- Identifies gaps and inconsistencies
-- Verifies success criteria
+- Creates git branch: `{number}-{feature-name}`
+- Switches to new branch
+- Prepares for implementation
 
 **Output:**
-- Analysis report
-- Gap identification
-- Recommendations
+- New git branch
+- Ready for `/workflow.observe`
 
 ---
 
-#### `/dashboard.test`
+### EPIC Workflow Commands (`/workflow.*`)
 
-Run comprehensive test suite with coverage reporting.
+These commands implement the EPIC methodology (Observe → Act → Verify → Loop) for feature development.
+
+**EPIC** = **E**xecute, **P**lan, **I**mprove, **C**ontinue (iterative development)
+
+---
+
+#### `/workflow.observe`
+
+Analyze current state and identify next tasks.
 
 **Usage:**
 ```
-/dashboard.test
+/workflow.observe
 ```
 
 **What it does:**
-- Runs unit, integration, e2e tests
-- Generates coverage report
-- Checks accessibility
-- Validates performance
+- Reads spec.md, plan.md, tasks.md
+- Analyzes what's been implemented (reads src/, tests/)
+- Identifies next actionable task
+- Provides context and guidance
+
+**Output:**
+- Current progress summary
+- Next recommended task
+- Context for implementation
+
+**Next step:** `/workflow.act`
+
+---
+
+#### `/workflow.act [task]`
+
+Implement a task following TDD (Test-Driven Development).
+
+**Usage:**
+```
+/workflow.act Implement sales filter component
+```
+
+**What it does:**
+- Writes failing test first (TDD red phase)
+- Implements code to make test pass (TDD green phase)
+- Refactors if needed (TDD refactor phase)
+- Follows best practices (type hints, docstrings)
+- Integrates with relevant Skills (data-analysis, plotly-viz, etc.)
+
+**Output:**
+- New/modified code in src/
+- New/modified tests in tests/
+- Implementation ready for verification
+
+**Next step:** `/workflow.verify`
+
+---
+
+#### `/workflow.verify`
+
+Validate implementation (tests, lint, type check, accessibility, performance).
+
+**Usage:**
+```
+/workflow.verify
+```
+
+**What it does:**
+- Runs full test suite (`pytest`)
+- Checks coverage (must meet 80% minimum)
+- Runs linter (`ruff`)
+- Runs type checker (`mypy`)
+- Runs accessibility audit (if applicable)
+- Checks performance targets (<3s load, <1s callbacks)
+
+**Output:**
+- Test results and coverage report
+- Lint/type check results
+- Accessibility compliance status
+- Performance measurements
+- Pass/fail status
+
+**Next step:** If pass → `/workflow.loop`, If fail → fix and `/workflow.verify` again
+
+---
+
+#### `/workflow.loop`
+
+Checkpoint progress and present next task options.
+
+**Usage:**
+```
+/workflow.loop
+```
+
+**What it does:**
+- Creates git commit with descriptive message
+- Updates progress tracking
+- Analyzes remaining tasks
+- Presents next task options
+- Decides: continue, pivot, or complete
+
+**Output:**
+- Git commit created
+- Progress summary
+- Next task recommendations
+
+**Next step:** `/workflow.observe` (continue cycle) or done
+
+---
+
+#### `/workflow.status`
+
+Show spec requirement completion progress.
+
+**Usage:**
+```
+/workflow.status
+```
+
+**What it does:**
+- Reads spec.md requirements (FR-NNN)
+- Analyzes code coverage of requirements
+- Shows which requirements are implemented
+- Identifies gaps and missing requirements
+
+**Output:**
+- Requirement completion matrix
+- Implementation coverage percentage
+- Missing/incomplete requirements
+
+---
+
+#### `/workflow.checkpoint`
+
+Create git commits with descriptive messages.
+
+**Usage:**
+```
+/workflow.checkpoint Implement data loading with pandas
+```
+
+**What it does:**
+- Runs git status
+- Stages relevant changes
+- Creates commit with message following Conventional Commits
+- Ensures tests pass before committing
+
+**Output:**
+- Git commit created
+
+---
+
+### Utility Commands (`/utils.*`)
+
+These commands provide development utilities for testing, linting, formatting, and dependency management.
+
+---
+
+#### `/utils.test [path]`
+
+Run pytest with coverage reporting.
+
+**Usage:**
+```
+/utils.test                    # Run all tests
+/utils.test tests/unit/        # Run specific directory
+/utils.test tests/test_foo.py  # Run specific file
+```
+
+**What it does:**
+- Runs pytest with coverage plugin
+- Generates coverage report (HTML and terminal)
+- Shows passing/failing tests
+- Identifies uncovered code
 
 **Output:**
 - Test results
-- Coverage report (HTML)
-- Performance metrics
-- Accessibility report
+- Coverage percentage
+- HTML coverage report in `htmlcov/`
 
 ---
 
-#### `/dashboard.review`
+#### `/utils.lint`
 
-Perform automated code quality review.
+Run Black, Ruff, and mypy and report issues.
 
 **Usage:**
 ```
-/dashboard.review
+/utils.lint
 ```
 
 **What it does:**
-- Runs Black formatter
+- Runs Black formatter (check mode)
 - Runs Ruff linter
 - Runs mypy type checker
-- Checks security (Bandit)
-- Reviews code patterns
+- Reports all issues found
 
 **Output:**
-- Quality report
-- Issues identified
-- Auto-fixes applied
-- Recommendations
+- Linting issues with file locations
+- Type errors
+- Formatting violations
+
+**Next step:** `/utils.format` to auto-fix
 
 ---
 
-### Deployment Commands
+#### `/utils.format`
 
-#### `/dashboard.deploy`
-
-Configure Claude Agent SDK deployment.
+Auto-format code with Black and Ruff.
 
 **Usage:**
 ```
-/dashboard.deploy
+/utils.format
 ```
 
 **What it does:**
-- Generates Agent SDK configs
-- Creates deployment manifests
-- Configures environments
-- Sets up health checks
-- Prepares for production
+- Runs Black formatter (write mode)
+- Runs Ruff with --fix flag
+- Applies automatic fixes
 
 **Output:**
-- `agents/` directory with configs
-- Docker files
-- Deployment scripts
-- Environment templates
+- Formatted code files
+- Summary of changes applied
+
+---
+
+#### `/utils.check-deps`
+
+Validate and check dependencies for updates/vulnerabilities.
+
+**Usage:**
+```
+/utils.check-deps
+```
+
+**What it does:**
+- Validates requirements.txt
+- Checks for package updates
+- Scans for security vulnerabilities (using safety or pip-audit)
+- Reports outdated or vulnerable packages
+
+**Output:**
+- Dependency status report
+- Update recommendations
+- Security warnings
+
+---
+
+#### `/utils.commit [message]`
+
+Create git commit with conventional commit format.
+
+**Usage:**
+```
+/utils.commit "feat: Add sales filter component"
+```
+
+**What it does:**
+- Validates commit message format
+- Stages changes
+- Creates commit
+- Follows Conventional Commits specification
+
+**Output:**
+- Git commit created
+
+---
+
+#### `/utils.diff [spec-number]`
+
+Show changes since feature branch creation.
+
+**Usage:**
+```
+/utils.diff 003
+```
+
+**What it does:**
+- Shows git diff from feature branch base
+- Highlights added/modified/deleted files
+- Shows line-by-line changes
+
+**Output:**
+- Git diff output
+
+---
+
+### Dash-Specific Commands (`/dash.*`)
+
+These commands help create Dash components, layouts, and callbacks following best practices.
+
+---
+
+#### `/dash.component [name] [type]`
+
+Create Dash component with tests and documentation.
+
+**Usage:**
+```
+/dash.component SalesFilter dropdown
+/dash.component DataTable table
+```
+
+**What it does:**
+- Creates component file in `src/components/`
+- Generates component function with proper structure
+- Creates unit test file in `tests/unit/components/`
+- Adds type hints and docstrings
+- Follows accessibility guidelines
+
+**Output:**
+- `src/components/{name}.py`
+- `tests/unit/components/test_{name}.py`
+
+---
+
+#### `/dash.layout [name]`
+
+Create responsive dashboard layout.
+
+**Usage:**
+```
+/dash.layout sales_dashboard
+```
+
+**What it does:**
+- Creates layout file in `src/layouts/`
+- Generates responsive grid structure
+- Includes header, sidebar, main content areas
+- Applies theming and styling
+- Follows accessibility guidelines
+
+**Output:**
+- `src/layouts/{name}.py`
+- `tests/unit/layouts/test_{name}.py`
+
+---
+
+#### `/dash.callback [description]`
+
+Create Dash callback with tests.
+
+**Usage:**
+```
+/dash.callback Update chart when filter changes
+```
+
+**What it does:**
+- Creates callback function in appropriate module
+- Defines Input, Output, State
+- Generates callback test
+- Follows callback best practices (prevent_initial_call, etc.)
+
+**Output:**
+- Callback code with @app.callback decorator
+- Test for callback logic
 
 ---
 
 ## Agent Skills
 
-Skills are specialized capabilities invoked automatically by Claude Code.
+Skills are specialized capabilities that auto-activate based on context. You don't invoke them explicitly—they activate when needed.
 
-### data-analysis
+### Development Skills (`.claude/skills/development/`)
 
-**Purpose:** Load, analyze, and generate insights from datasets
+These skills support building the Claude Code system itself.
 
-**Capabilities:**
-- Load CSV, JSON, Parquet, SQL data
-- Exploratory data analysis (EDA)
-- Statistical summaries
-- Data quality assessment
-- Visualization recommendations
-- Transformation pipeline generation
+1. **spec-kit-workflow**
+   - **Purpose:** Guide specification creation following spec-kit methodology
+   - **Activates when:** Working with spec.md files, creating requirements
+   - **Provides:** Templates, requirement formats, success criteria patterns
 
-**Invoked by:** `/dashboard.plan`, `/dashboard.implement`, data-pipeline sub-agent
+2. **claude-code-architecture**
+   - **Purpose:** Expertise on Commands, Skills, Sub-Agents, Hooks architecture
+   - **Activates when:** Designing architecture, choosing between mechanisms
+   - **Provides:** Decision matrices, architectural patterns, best practices
 
-**Configuration:** `.claude/skills/data-analysis.yaml`
+3. **research-synthesis**
+   - **Purpose:** Analyze reference implementations and extract patterns
+   - **Activates when:** Researching codebases, analyzing patterns
+   - **Provides:** Analysis methods, pattern extraction techniques
 
----
+### Production Skills (`.claude/skills/production/`)
 
-### plotly-viz
+These skills support dashboard developers building dashboards.
 
-**Purpose:** Generate appropriate Plotly visualizations
+1. **data-analysis**
+   - **Purpose:** Statistical analysis, EDA, data quality checking
+   - **Activates when:** Loading .csv/.json/.parquet files, using pandas/SQL
+   - **Provides:** EDA workflows, quality checks, visualization recommendations
 
-**Capabilities:**
-- Auto-select chart types
-- Generate Dash components
-- Apply consistent theming
-- Ensure accessibility (WCAG 2.1 AA)
-- Optimize performance
-- Add interactivity
+2. **plotly-viz**
+   - **Purpose:** Chart generation with WCAG 2.1 AA compliance
+   - **Activates when:** Creating charts, mentions "visualization", "plot", "chart"
+   - **Provides:** Chart selection guide, accessible color palettes, Plotly patterns
 
-**Chart types:** bar, line, scatter, histogram, box, heatmap, pie, area, funnel, sunburst
+3. **dash-components**
+   - **Purpose:** Component patterns, callback architecture
+   - **Activates when:** Creating Dash components, writing callbacks
+   - **Provides:** Component patterns, callback best practices, state management
 
-**Invoked by:** `/dashboard.implement`, component-builder sub-agent
+4. **accessibility-audit**
+   - **Purpose:** WCAG 2.1 Level AA compliance validation
+   - **Activates when:** Running `/workflow.verify`, mentions "accessibility"
+   - **Provides:** WCAG checklist, color contrast checking, keyboard nav testing
 
-**Configuration:** `.claude/skills/plotly-viz.yaml`
-
----
-
-### dashboard-testing
-
-**Purpose:** Generate comprehensive test suites
-
-**Capabilities:**
-- Unit test generation
-- Integration test creation
-- E2E test workflows
-- Fixture management
-- Mock data creation
-- Coverage optimization
-
-**Invoked by:** `/dashboard.implement`, test-engineer sub-agent
-
-**Configuration:** `.claude/skills/dashboard-testing.yaml`
-
----
-
-### accessibility-audit
-
-**Purpose:** Validate WCAG compliance
-
-**Capabilities:**
-- Color contrast checking
-- Keyboard navigation testing
-- Screen reader compatibility
-- Alt text validation
-- ARIA label verification
-
-**Standards:** WCAG 2.1 Level AA
-
-**Invoked by:** `/dashboard.test`, `/dashboard.review`
-
-**Configuration:** `.claude/skills/accessibility-audit.yaml`
-
----
-
-### performance-optimizer
-
-**Purpose:** Identify and fix performance issues
-
-**Capabilities:**
-- Bottleneck detection
-- Callback optimization
-- Data loading efficiency
-- Rendering performance
-- Caching strategies
-- Resource usage analysis
-
-**Targets:** < 3s load, < 1s callbacks
-
-**Invoked by:** `/dashboard.review`, `/dashboard.implement`
-
-**Configuration:** `.claude/skills/performance-optimizer.yaml`
-
----
-
-### component-builder
-
-**Purpose:** Create reusable Dash components
-
-**Capabilities:**
-- Component scaffolding
-- Props definition
-- Type hints
-- Documentation
-- Unit tests
-- Storybook examples
-
-**Invoked by:** component-builder sub-agent
-
-**Configuration:** `.claude/skills/component-builder.yaml`
+5. **performance-optimizer**
+   - **Purpose:** Bottleneck detection and optimization
+   - **Activates when:** Performance issues detected, mentions "slow", "optimize"
+   - **Provides:** Bottleneck identification, caching strategies, profiling methods
 
 ---
 
 ## Sub-Agents
 
-Specialized agents for parallel work on different aspects.
+Specialized agents that can be launched for parallel work on different aspects of implementation.
 
 ### component-builder
 
@@ -382,6 +591,8 @@ Specialized agents for parallel work on different aspects.
 - Apply theming and styling
 
 **Coordination:** File locking for component files
+
+**When to use:** Creating multiple components in parallel
 
 ---
 
@@ -398,6 +609,8 @@ Specialized agents for parallel work on different aspects.
 
 **Coordination:** Queue-based for database operations
 
+**When to use:** Building data loading and processing infrastructure
+
 ---
 
 ### test-engineer
@@ -413,66 +626,48 @@ Specialized agents for parallel work on different aspects.
 
 **Coordination:** Independent (test files separate)
 
----
-
-### documentation
-
-**Specialization:** Documentation generation
-
-**Responsibilities:**
-- API documentation
-- Component docs
-- User guides
-- Architecture diagrams
-- README updates
-
-**Coordination:** Independent (docs separate from code)
+**When to use:** Generating comprehensive test coverage
 
 ---
 
-## MCP Integration
+## MCP Integration (Optional)
 
-Model Context Protocol servers for data access.
+Model Context Protocol servers for standardized data access. These are **optional** - dashboards can use direct access methods without MCP.
 
-### Configuration
-
-File: `.claude/mcp_config.json`
+**Configuration:** `.claude/mcp_config.json`
 
 ### Available MCP Servers
 
-#### filesystem
-- **Purpose:** Access CSV, JSON, Parquet files
-- **Path:** `./data`
-- **Command:** `mcp-server-filesystem`
-
-#### postgres
+#### mcp__postgres
 - **Purpose:** PostgreSQL database access
 - **Connection:** `${POSTGRES_URL}` environment variable
-- **Command:** `mcp-server-postgres`
-- **Status:** Disabled by default
+- **Status:** Disabled by default (enable in config)
 
-#### sqlite
-- **Purpose:** Local SQLite database
-- **Path:** `./data/local.db`
-- **Command:** `mcp-server-sqlite`
+#### mcp__filesystem
+- **Purpose:** Access CSV, JSON, Parquet files
+- **Path:** `./data` (configurable)
+- **Status:** Enabled
 
-#### fetch
+#### mcp__fetch
 - **Purpose:** REST API access
-- **Command:** `mcp-server-fetch`
+- **Status:** Enabled
 
-#### search
+#### mcp__search
 - **Purpose:** Search reference documentation
-- **Path:** `./reference`
-- **Command:** `mcp-server-search`
+- **Path:** `./reference` (configurable)
+- **Status:** Enabled
 
 ### Enabling MCP Servers
 
-Edit `.claude/mcp_config.json` and set:
+Edit `.claude/mcp_config.json`:
 ```json
 {
   "mcpServers": {
     "postgres": {
-      "enabled": true
+      "enabled": true,
+      "env": {
+        "POSTGRES_URL": "${POSTGRES_URL}"
+      }
     }
   }
 }
@@ -480,155 +675,124 @@ Edit `.claude/mcp_config.json` and set:
 
 ---
 
-## Agent Memory
+## Workflow Examples
 
-Persistent context across sessions stored in `.specify/memory/`.
+### Example 1: New Dashboard Feature (Full EPIC Cycle)
 
-### Memory Files
+```bash
+# 1. Create specification
+/spec.create Build a revenue dashboard with year-over-year comparison
 
-#### constitution.md
-Project principles and development guidelines (already exists)
+# 2. Manually edit spec.md, add plan.md and tasks.md
 
-#### patterns.md
-Coding patterns and conventions learned during development
+# 3. Create feature branch
+/spec.branch 006
 
-#### decisions.md
-Architectural decisions with rationale and date
+# 4. Begin EPIC workflow
+/workflow.observe
+# → Analyzes spec, identifies first task: "Create project structure"
 
-#### preferences.md
-Developer preferences, naming conventions, anti-patterns to avoid
+/workflow.act Create src/dashboards/revenue/ directory structure
+# → Creates directories and __init__.py files
 
-### Memory Management
+/workflow.verify
+# → Tests pass (no code yet), linting passes
 
-- **Auto-save:** Every 10 minutes
-- **Max size:** 10 MB
-- **Format:** Markdown
-- **Editable:** Yes, manually edit any file
+/workflow.loop
+# → Commits changes, shows next task
+
+/workflow.observe
+# → Identifies next task: "Implement data loading"
+
+/workflow.act Load revenue data from PostgreSQL
+# → data-analysis skill activates
+# → Implements data loader with pandas
+# → Creates tests
+
+/workflow.verify
+# → Tests pass, coverage 85%, linting passes
+
+/workflow.loop
+# → Commits, continues
+
+# ... continue cycle until all requirements implemented ...
+
+/workflow.status
+# → Shows FR-001 to FR-015 all implemented
+
+# 5. Final verification
+/utils.test
+/utils.lint
+/workflow.verify
+
+# 6. Ready for deployment (handled separately via Agent SDK)
+```
+
+---
+
+### Example 2: Quick Testing and Formatting
+
+```bash
+# Run tests
+/utils.test
+
+# Fix formatting
+/utils.format
+
+# Check all quality metrics
+/utils.lint
+```
+
+---
+
+### Example 3: Creating Components
+
+```bash
+# Create a filter component
+/dash.component RegionFilter dropdown
+
+# Create a layout
+/dash.layout revenue_dashboard
+
+# Create callback
+/dash.callback Update revenue chart when region filter changes
+```
 
 ---
 
 ## Configuration Files
 
-### .claude/agent_config.yaml
-
-Main agent configuration file.
-
-**Key settings:**
-- Code quality: 80% coverage, Black, Ruff, mypy
-- Testing: pytest, pytest-cov, Playwright
-- Sub-agents: Max 4 concurrent
-- Performance: Parallel execution enabled
-- Security: Secret scanning enabled
-
 ### .claude/mcp_config.json
 
-MCP server configuration.
+MCP server configuration (optional).
 
 **Key settings:**
 - Enabled servers
-- Connection strings
-- Caching: Enabled, 1 hour TTL
-- Security: Allowed/denied paths
+- Connection strings (via environment variables)
+- Security (allowed/denied paths)
+- Caching (TTL settings)
 
----
+### specs/memory/constitution.md
 
-## Workflow Examples
+Project principles and development guidelines (required).
 
-### Example 1: New Dashboard Feature
+**Contains:**
+- 10 core principles
+- Code quality standards (80% coverage, WCAG 2.1 AA, <3s load)
+- Testing requirements
+- Security standards
 
-```bash
-# Create specification
-/dashboard.spec Build a revenue dashboard with year-over-year comparison
+### specs/memory/patterns.md
 
-# Review and refine spec
-# Edit .specify/specs/003-revenue-dashboard/spec.md
+Coding patterns and conventions (to be created).
 
-# Create plan
-/dashboard.plan Use Dash with Plotly Express. Load from PostgreSQL. Cache with Redis.
+### specs/memory/decisions.md
 
-# Review plan
-# Edit .specify/specs/003-revenue-dashboard/plan.md
+Architectural decisions log (to be created).
 
-# Generate tasks
-/dashboard.tasks
+### specs/memory/preferences.md
 
-# Review tasks
-# Edit .specify/specs/003-revenue-dashboard/tasks.md
-
-# Implement
-/dashboard.implement
-
-# Test
-/dashboard.test
-
-# Review quality
-/dashboard.review
-
-# Deploy
-/dashboard.deploy
-```
-
-### Example 2: Data Analysis Workflow
-
-```bash
-# Create spec
-/dashboard.spec Analyze customer segmentation data and create interactive dashboard
-
-# Plan with MCP
-/dashboard.plan Use MCP postgres server for data access. Plotly Dash for visualization.
-
-# During implementation, data-analysis skill automatically:
-# - Connects to database via MCP
-# - Performs EDA
-# - Identifies segments
-# - Suggests visualizations
-# - Generates transformation code
-
-/dashboard.implement
-```
-
-### Example 3: Parallel Development
-
-```bash
-# Start implementation
-/dashboard.implement
-
-# Claude Code launches sub-agents automatically:
-# - component-builder: Creates UI components in parallel
-# - data-pipeline: Builds data loaders concurrently
-# - test-engineer: Writes tests alongside implementation
-# - documentation: Generates docs as code is written
-
-# All work coordinated to avoid conflicts
-# Final integration happens automatically
-```
-
----
-
-## Customization
-
-### Adding Custom Commands
-
-1. Create `.claude/commands/dashboard.{action}.md`
-2. Define command behavior and arguments
-3. Document usage and examples
-4. Update this file
-
-### Adding Custom Skills
-
-1. Create `.claude/skills/{skill-name}.yaml`
-2. Define capabilities, inputs, outputs
-3. Specify implementation guidelines
-4. Test with sample scenarios
-5. Update this file
-
-### Configuring MCP Servers
-
-1. Edit `.claude/mcp_config.json`
-2. Add server configuration
-3. Set environment variables for credentials
-4. Enable the server
-5. Test connection
+Developer preferences and anti-patterns (to be created).
 
 ---
 
@@ -637,26 +801,26 @@ MCP server configuration.
 ### Commands Not Found
 
 - Verify `.claude/commands/` directory exists
-- Check command file naming: `dashboard.{action}.md`
+- Check command file naming matches Spec 002
 - Reload Claude Code configuration
 
-### Skills Not Working
+### Skills Not Activating
 
-- Check `.claude/skills/` directory
-- Validate YAML syntax
-- Review skill configuration in agent_config.yaml
+- Check `.claude/skills/` directory structure
+- Validate SKILL.md files exist
+- Review activation keywords in context
 
 ### MCP Connection Failures
 
 - Verify server is running
-- Check connection credentials
-- Review mcp_config.json configuration
+- Check connection credentials in environment variables
+- Review `mcp_config.json` configuration
 - Check allowed paths in security settings
 
 ### Sub-Agent Conflicts
 
-- Review coordination strategy in agent_config.yaml
-- Check for file locking issues
+- Review coordination strategy (file locking, queue-based)
+- Check for file access conflicts
 - Increase task timeout if needed
 - Reduce max_concurrent sub-agents
 
@@ -664,21 +828,41 @@ MCP server configuration.
 
 ## Performance Tips
 
-1. **Enable Caching:** Speeds up repeated operations
-2. **Use MCP:** Faster data access than manual file reading
-3. **Parallel Tasks:** Mark independent tasks with [P] in tasks.md
-4. **Sub-Agents:** Launch for truly parallel work
-5. **Memory:** Keeps context, reduces repeated explanations
+1. **Use EPIC workflow** - Small, iterative cycles are faster than big implementations
+2. **Enable MCP caching** - Speeds up repeated data operations
+3. **Leverage Skills** - They provide expertise automatically
+4. **Parallel Sub-Agents** - Use for independent work
+5. **Keep context lean** - Progressive disclosure in Skills keeps context small
 
 ---
 
 ## Security Best Practices
 
-1. **Never hardcode secrets:** Use environment variables
-2. **Enable secret scanning:** Configured in agent_config.yaml
-3. **MCP security:** Configure allowed/denied paths
-4. **Review code:** Use `/dashboard.review` before commits
-5. **Audit dependencies:** Run safety checks
+1. **Never hardcode secrets** - Use environment variables
+2. **Enable secret scanning** - Configured in settings
+3. **MCP security** - Configure allowed/denied paths
+4. **Review code** - Use `/utils.lint` before commits
+5. **Audit dependencies** - Run `/utils.check-deps` regularly
+
+---
+
+## Implementation Order
+
+Per Spec 002 and approved specs:
+
+```
+Phase 1: Spec 002 - Claude Code Commands Setup (this configuration)
+  ↓
+Phase 2: Spec 003 - Development Skills (3 skills)
+  ↓
+Phase 3: Spec 004 - Production Skills (5 skills)
+  ↓
+Phase 4: Spec 005 - MCP Integration (optional)
+  ↓
+Phase 5: Spec 001 - Dashboard Foundation (application code)
+```
+
+**Current Status:** Phase 1 (Spec 002) in planning - need to create plan.md and tasks.md
 
 ---
 
@@ -686,19 +870,26 @@ MCP server configuration.
 
 For issues or questions:
 
-1. Check `.specify/specs/002-claude-code-agent-setup/spec.md`
-2. Review `.claude/README.md`
-3. Consult `docs/REFERENCES.md` for learning resources
-4. Review constitution: `.specify/memory/constitution.md`
+1. Check Spec 002: `specs/002-claude-code-commands-setup/spec.md`
+2. Review constitution: `specs/memory/constitution.md`
+3. Check workflow: `specs/WORKFLOW.md`
+4. Review implementation plan: `IMPLEMENTATION_PLAN.md`
 
 ---
 
 ## Version
 
-- **Configuration Version:** 1.0.0
-- **Last Updated:** 2025-11-10
-- **Specification:** `.specify/specs/002-claude-code-agent-setup/spec.md`
+- **Configuration Version:** 2.0.0 (Aligned with Spec 002)
+- **Last Updated:** 2025-11-13
+- **Specification:** `specs/002-claude-code-commands-setup/spec.md` (Approved)
+- **Changes from 1.0.0:**
+  - Updated command namespace from `/dashboard.*` to match Spec 002
+  - Added EPIC workflow (Observe → Act → Verify → Loop)
+  - Aligned all commands with Spec 002 requirements
+  - Added Dash-specific commands
+  - Clarified Skills activation patterns
+  - Updated MCP as optional enhancement
 
 ---
 
-*This setup enables rapid, high-quality dashboard development with Claude Code following spec-driven methodology and constitutional standards.*
+*This setup enables rapid, high-quality dashboard development with Claude Code following spec-driven methodology, EPIC workflow, and constitutional standards.*
