@@ -1,0 +1,351 @@
+{
+  "$schema": "https://claude.ai/schemas/claude-code-settings-v1.json",
+  "version": "1.0.0",
+  "project": {
+    "name": "cc-dash-as-code",
+    "description": "Spec-driven dashboard development with Plotly Dash",
+    "type": "dashboard",
+    "language": "python",
+    "framework": "dash"
+  },
+
+  "permissions": {
+    "allowed_tools": [
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Task",
+      "TodoWrite",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "file_access": {
+      "read": [
+        "**/*.py",
+        "**/*.md",
+        "**/*.json",
+        "**/*.yaml",
+        "**/*.yml",
+        "**/*.txt",
+        "**/*.csv",
+        "**/requirements.txt",
+        "**/pyproject.toml",
+        "**/.gitignore"
+      ],
+      "write": [
+        "src/**/*.py",
+        "tests/**/*.py",
+        "specs/**/*.md",
+        ".claude/**/*.md",
+        ".claude/settings.json",
+        "docs/**/*.md",
+        "README.md",
+        "CLAUDE.md"
+      ],
+      "denied": [
+        "**/.env",
+        "**/*.key",
+        "**/*.pem",
+        "**/*_secret*",
+        "**/credentials.json",
+        "**/.aws/**",
+        "**/.ssh/**"
+      ]
+    },
+    "bash_commands": {
+      "allowed": [
+        "git",
+        "pytest",
+        "black",
+        "ruff",
+        "mypy",
+        "pip",
+        "python",
+        "ls",
+        "cat",
+        "mkdir",
+        "touch",
+        "wc",
+        "head",
+        "tail"
+      ],
+      "denied": [
+        "rm -rf",
+        "sudo",
+        "chmod 777",
+        "curl",
+        "wget"
+      ]
+    }
+  },
+
+  "code_quality": {
+    "formatters": {
+      "black": {
+        "enabled": true,
+        "line_length": 88,
+        "target_version": ["py311"],
+        "exclude": "venv/|build/|dist/"
+      },
+      "isort": {
+        "enabled": false,
+        "profile": "black"
+      }
+    },
+    "linters": {
+      "ruff": {
+        "enabled": true,
+        "select": ["E", "F", "W", "I", "N", "D", "UP", "B", "S", "C"],
+        "ignore": ["D203", "D213"],
+        "line_length": 88,
+        "target_version": "py311"
+      },
+      "pylint": {
+        "enabled": false
+      }
+    },
+    "type_checker": {
+      "mypy": {
+        "enabled": true,
+        "python_version": "3.11",
+        "strict": true,
+        "warn_return_any": true,
+        "warn_unused_configs": true,
+        "disallow_untyped_defs": true
+      }
+    },
+    "testing": {
+      "framework": "pytest",
+      "coverage": {
+        "minimum": 80,
+        "target": 90,
+        "fail_under": 80,
+        "omit": [
+          "*/tests/*",
+          "*/venv/*",
+          "*/__pycache__/*"
+        ]
+      },
+      "pytest_options": [
+        "-v",
+        "--cov=src",
+        "--cov-report=html",
+        "--cov-report=term-missing"
+      ]
+    }
+  },
+
+  "workflow": {
+    "spec_driven": true,
+    "methodology": "EPIC",
+    "epic_phases": ["observe", "act", "verify", "loop"],
+    "tdd_required": true,
+    "git": {
+      "branch_patterns": {
+        "feature": "{number}-{name}",
+        "hotfix": "hotfix/{name}",
+        "release": "release/{version}"
+      },
+      "commit_format": "conventional_commits",
+      "commit_types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "perf",
+        "test",
+        "build",
+        "ci",
+        "chore"
+      ],
+      "require_verified": true,
+      "pre_commit_hooks": ["black", "ruff", "mypy"]
+    }
+  },
+
+  "accessibility": {
+    "standard": "WCAG_2.1_AA",
+    "audit_on_verify": true,
+    "requirements": {
+      "aria_labels": true,
+      "semantic_html": true,
+      "keyboard_navigation": true,
+      "color_contrast_ratio": 4.5,
+      "focus_indicators": true
+    }
+  },
+
+  "performance": {
+    "targets": {
+      "initial_load_time": 3000,
+      "callback_execution": 1000,
+      "data_loading_100k_rows": 1000
+    },
+    "monitoring": {
+      "enabled": true,
+      "profile_callbacks": true,
+      "log_slow_operations": true
+    }
+  },
+
+  "security": {
+    "secret_scanning": {
+      "enabled": true,
+      "patterns": [
+        "password",
+        "api[_-]?key",
+        "secret",
+        "token",
+        "credentials"
+      ],
+      "block_commit_with_secrets": true
+    },
+    "dependency_scanning": {
+      "enabled": true,
+      "tool": "pip-audit",
+      "fail_on_vulnerability": true,
+      "severity_threshold": "medium"
+    }
+  },
+
+  "skills": {
+    "auto_activate": true,
+    "progressive_disclosure": true,
+    "levels": {
+      "level_1_metadata": {
+        "token_budget": 60,
+        "content": [
+          "purpose",
+          "activation_keywords",
+          "output_format"
+        ]
+      },
+      "level_2_core": {
+        "token_budget": 1000,
+        "content": [
+          "detailed_guidance",
+          "patterns",
+          "examples"
+        ]
+      },
+      "level_3_references": {
+        "token_budget": 5000,
+        "content": [
+          "complete_documentation",
+          "all_examples",
+          "edge_cases"
+        ]
+      }
+    },
+    "development_skills": {
+      "spec-kit-workflow": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "claude-code-architecture": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "research-synthesis": {
+        "enabled": true,
+        "priority": "medium"
+      }
+    },
+    "production_skills": {
+      "data-analysis": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "plotly-viz": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "dash-components": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "accessibility-audit": {
+        "enabled": true,
+        "priority": "high"
+      },
+      "performance-optimizer": {
+        "enabled": true,
+        "priority": "medium"
+      }
+    }
+  },
+
+  "sub_agents": {
+    "enabled": true,
+    "max_concurrent": 3,
+    "agents": {
+      "component-builder": {
+        "enabled": true,
+        "max_concurrent": 2,
+        "timeout": 1800,
+        "coordination": "file-locking"
+      },
+      "data-pipeline": {
+        "enabled": true,
+        "max_concurrent": 1,
+        "timeout": 3600,
+        "coordination": "queue-based"
+      },
+      "test-engineer": {
+        "enabled": true,
+        "max_concurrent": 3,
+        "timeout": 2400,
+        "coordination": "independent"
+      }
+    }
+  },
+
+  "commands": {
+    "directories": {
+      "spec": ".claude/commands/spec",
+      "workflow": ".claude/commands/workflow",
+      "utils": ".claude/commands/utils",
+      "dash": ".claude/commands/dash"
+    },
+    "namespaces": [
+      "/spec.*",
+      "/workflow.*",
+      "/utils.*",
+      "/dash.*"
+    ]
+  },
+
+  "memory": {
+    "constitution": "specs/memory/constitution.md",
+    "patterns": "specs/memory/patterns.md",
+    "decisions": "specs/memory/decisions.md",
+    "preferences": "specs/memory/preferences.md"
+  },
+
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": ".claude/logs/claude-code.log",
+    "max_size": "10MB",
+    "backup_count": 5
+  },
+
+  "integrations": {
+    "mcp": {
+      "enabled": false,
+      "config_file": ".claude/mcp_config.json"
+    },
+    "github": {
+      "enabled": true,
+      "use_gh_cli": true
+    },
+    "ci_cd": {
+      "platform": "github_actions",
+      "config_file": ".github/workflows/ci.yml"
+    }
+  }
+}
