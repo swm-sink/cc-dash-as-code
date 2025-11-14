@@ -568,3 +568,53 @@ As development progresses, add preferences for:
 ---
 
 **Note**: This is a living document. Add preferences and anti-patterns as they're identified during development.
+
+---
+
+## Testing Anti-Patterns (LLM-Specific)
+
+When writing tests, avoid these common LLM anti-patterns that lead to low coverage and poor test quality:
+
+### ❌ Anti-Pattern 1: Generic Test Names
+**BAD**: `def test_function()`, `def test_component()`, `def test_data()`
+**GOOD**: `def test_csv_loader_returns_dataframe_with_expected_columns()`
+
+### ❌ Anti-Pattern 2: Missing Assertions
+**BAD**: Tests that execute code but don't assert anything
+**GOOD**: Every test has multiple specific assertions with failure messages
+
+### ❌ Anti-Pattern 3: Hardcoded Magic Numbers
+**BAD**: `assert len(df) == 1000` (what is 1000?)
+**GOOD**: `EXPECTED_ROW_COUNT = 1000; assert len(df) == EXPECTED_ROW_COUNT`
+
+### ❌ Anti-Pattern 4: No Edge Case Testing
+**BAD**: Only testing happy paths
+**GOOD**: Test empty data, boundary values, null values, maximum limits
+
+### ❌ Anti-Pattern 5: No Error Path Testing
+**BAD**: Only testing successful execution
+**GOOD**: Use `pytest.raises` for all exception paths with message validation
+
+### ❌ Anti-Pattern 6: No Parametrization
+**BAD**: Duplicate tests for similar scenarios
+**GOOD**: Use `@pytest.mark.parametrize` to test multiple inputs efficiently
+
+### ❌ Anti-Pattern 7: Missing Docstrings
+**BAD**: No docstring explaining what test validates
+**GOOD**: Google-style docstring with Verifies section
+
+### ❌ Anti-Pattern 8: No Fixture Usage
+**BAD**: Duplicated test setup code in every test
+**GOOD**: Use pytest fixtures for common test data and setup
+
+### ❌ Anti-Pattern 9: No Branch Coverage
+**BAD**: Only testing one branch of if/else statements
+**GOOD**: Test all branches, measure with `--cov-branch`
+
+### ❌ Anti-Pattern 10: No Accessibility Testing
+**BAD**: UI tests without WCAG 2.1 AA validation
+**GOOD**: Test ARIA labels, semantic HTML, keyboard navigation
+
+**Reference**: See `specs/templates/test-templates/LLM_ANTI_PATTERNS.md` for detailed examples and corrections.
+
+**Enforcement**: All tests must achieve 95%+ coverage (line and branch) without anti-patterns.

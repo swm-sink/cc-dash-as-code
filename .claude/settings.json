@@ -120,21 +120,37 @@
     "testing": {
       "framework": "pytest",
       "coverage": {
-        "minimum": 80,
-        "target": 90,
-        "fail_under": 80,
+        "minimum": 95,
+        "target": 98,
+        "fail_under": 95,
         "omit": [
           "*/tests/*",
           "*/venv/*",
           "*/__pycache__/*"
-        ]
+        ],
+        "branches": true
       },
       "pytest_options": [
         "-v",
         "--cov=src",
         "--cov-report=html",
-        "--cov-report=term-missing"
-      ]
+        "--cov-report=term-missing",
+        "--cov-branch",
+        "--strict-markers",
+        "--strict-config"
+      ],
+      "test_structure": {
+        "use_fixtures": true,
+        "use_factories": true,
+        "use_parametrize": true,
+        "require_docstrings": true
+      },
+      "anti_patterns": {
+        "detect_llm_antipatterns": true,
+        "block_generic_names": true,
+        "require_edge_case_tests": true,
+        "require_error_path_tests": true
+      }
     }
   },
 

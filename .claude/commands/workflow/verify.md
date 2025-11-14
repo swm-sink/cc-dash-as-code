@@ -38,7 +38,7 @@ This command performs comprehensive quality validation:
      - Test count (passed/failed/skipped)
      - Coverage percentage
      - Failed test details with traceback
-   - **Pass Criteria**: All tests pass, coverage ≥ 80%
+   - **Pass Criteria**: All tests pass, coverage ≥ 95% (line and branch)
 
 2. **Run Linter (Ruff)**:
    - Execute: `ruff check src/ tests/`
@@ -107,13 +107,13 @@ Running quality validation...
     Skipped: 2 tests
 
   Coverage:
-    Overall:  87%
-    src/components/: 92%
-    src/data/: 85%
-    src/layouts/: 80%
+    Overall:  97% (line), 96% (branch)
+    src/components/: 98%
+    src/data/: 97%
+    src/layouts/: 95%
 
   Report: htmlcov/index.html
-  Status: ✅ PASS (coverage ≥ 80%)
+  Status: ✅ PASS (coverage ≥ 95%)
 
 ✅ Linting (Ruff)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -223,12 +223,14 @@ Running quality validation...
        Location: tests/integration/test_dashboard.py:89
 
   Coverage:
-    Overall:  75% ⚠️ (target: 80%)
+    Overall:  88% ⚠️ (target: 95%)
+    Branch coverage: 82% ⚠️ (target: 95%)
     Missing coverage:
-      - src/data/csv_loader.py lines 67-72 (error handling)
-      - src/components/sales_filter.py lines 34-38 (validation)
+      - src/data/csv_loader.py lines 67-72 (error handling not tested)
+      - src/components/sales_filter.py lines 34-38 (validation edge cases missing)
+      - Branches: if/else in csv_loader.py:45, sales_filter.py:29
 
-  Status: ❌ FAIL (3 tests failed, coverage below 80%)
+  Status: ❌ FAIL (3 tests failed, coverage below 95%)
 
 ⚠️ Linting (Ruff)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -384,7 +386,7 @@ For verification to PASS, all of the following must be true:
 
 | Check | Criteria |
 |-------|----------|
-| Tests | All tests pass, coverage ≥ 80% |
+| Tests | All tests pass, coverage ≥ 95% (line and branch) |
 | Linting | Zero errors (warnings acceptable) |
 | Type Check | Zero type errors |
 | Formatting | All files formatted correctly |
@@ -410,7 +412,7 @@ This command enforces quality standards from `specs/memory/constitution.md`:
 - **Core Principle 3**: Type safety (mypy must pass)
 - **Core Principle 6**: WCAG 2.1 AA compliance (accessibility check)
 - **Core Principle 8**: Performance (<3s load, <1s callbacks)
-- **Quality Standard 1**: 80% test coverage minimum
+- **Quality Standard 1**: 95% test coverage minimum (line and branch)
 - **Quality Standard 3**: Zero linting errors
 
 ## See Also

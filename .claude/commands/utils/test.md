@@ -331,9 +331,10 @@ Recommendation: Create and activate virtual environment first.
 ## Coverage Targets
 
 Per `specs/memory/constitution.md`:
-- **Minimum**: 80% overall coverage
-- **Goal**: 90%+ for critical modules
-- **Acceptable**: 70%+ for UI components (harder to test)
+- **Minimum**: 95% overall coverage (line and branch)
+- **Goal**: 98%+ for critical modules
+- **Branch Coverage**: Required (use --cov-branch)
+- **No Exceptions**: All modules must meet 95% minimum
 
 ## Integration with EPIC Workflow
 
