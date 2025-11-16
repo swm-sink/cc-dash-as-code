@@ -30,7 +30,7 @@
 #### Code Quality
 - **Python 3.11+** as the baseline runtime
 - Type hints required for all function signatures
-- Minimum **80% test coverage** for all modules
+- Minimum **95% test coverage** for all modules (with branch coverage)
 - Follow **PEP 8** style guidelines with Black formatter
 - Use **Ruff** for linting and import organization
 
@@ -53,7 +53,7 @@
 #### Continuous Validation
 - All tests must pass before merge to main branch
 - Automated quality gates for:
-  - Code coverage (minimum 80%)
+  - Code coverage (minimum 95% with branch coverage)
   - Performance benchmarks
   - Security scanning (dependency vulnerabilities)
   - Type checking (mypy strict mode)
